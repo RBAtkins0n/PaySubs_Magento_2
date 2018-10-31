@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!--
+/*
+ * Copyright (c) 2018 PayGate (Pty) Ltd
+ *
+ * Author: App Inlet (Pty) Ltd
+ * 
+ * Released under the GNU General Public License
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="paysubs" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>PaySubs</label>
+                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                </field>
+                <field id="debug" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable PaySubs Debug Log</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Log request data to paysubs.log, should be set to "No" when site is live</comment>
+                </field>
+                <field id="terminal_id" translate="label" type="text" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Terminal ID</label>
+                    <comment>The terminal ID given to you by PaySubs</comment>
+                </field>                
+                <field id="pam" translate="label" type="text" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>PAM Hash Value</label>
+                    <comment>If PAM is set, ensure the identical PAM is set on your Virtual Terminal</comment>
+                </field>
+                <field id="description" translate="label" type="text" sortOrder="23" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Description for Goods</label>
+                </field>                
+                <field id="budget" translate="label" type="select" sortOrder="24" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Allow Budget Transactions</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>   
+                <field id="holder_email" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Send Cardholder Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>   
+                <field id="sms_message" translate="label" type="select" sortOrder="26" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Send Transaction SMS</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>                         
+                <field id="message" translate="label" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Transaction SMS Message</label>
+                </field>    
+                <field id="recurring" translate="label" type="select" sortOrder="28" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Create a recurring transaction</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="occur_frequency" translate="label" type="text" sortOrder="29" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Occur Frequency</label>
+                </field>
+                <field id="occur_count" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Occur Count</label>
+                </field>              
+                <field id="occur_amount" translate="label" type="text" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Occur Amount</label>
+                </field>  
+                <field id="occur_date" translate="label" type="text" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Occurance Date</label>
+                </field>            
+                <field id="occurance_email" translate="label" type="text" sortOrder="33" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Occur tran receipt email</label>
+                </field>    
+                <field id="delayed_settlement" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Delayed Settlements Allowed</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>                                                     
+                <field id="allowed_carrier" translate="label" type="multiselect" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Allowed Shipping Methods</label>
+                    <source_model>Magento\Shipping\Model\Config\Source\Allmethods</source_model>
+                </field>
+                <field id="allowspecific" translate="label" type="allowspecific" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Payment from Applicable Countries</label>
+                    <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                </field>
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="41" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Payment from Specific Countries</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="paysubs_return_url" translate="label" type="select" sortOrder="42" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Return URLS provided</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="paysubs_approved_url" translate="label" type="text" sortOrder="43" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Approved URL</label>
+                </field> 
+                <field id="paysubs_declined_url" translate="label" type="text" sortOrder="44" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Declined URL</label>
+                </field> 
+                <field id="paysubs_cancelled_url" translate="label" type="text" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Cancelled URL</label>
+                </field>
+                <field id="instructions" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Instructions</label>
+                </field>
+                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Sort Order</label>
+                    <frontend_class>validate-number</frontend_class>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
