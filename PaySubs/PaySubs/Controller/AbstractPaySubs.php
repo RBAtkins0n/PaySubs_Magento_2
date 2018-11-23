@@ -125,7 +125,9 @@ abstract class AbstractPaySubs extends AppAction implements RedirectLoginInterfa
         \Magento\Customer\Model\Url $customerUrl,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
-        \PaySubs\PaySubs\Model\PaySubs $paymentMethod
+        \PaySubs\PaySubs\Model\PaySubs $paymentMethod,
+        \Magento\Sales\Model\Order\Email\Sender\OrderSender $OrderSender,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date
     ) {
         $pre = __METHOD__ . " : ";
 
@@ -136,12 +138,14 @@ abstract class AbstractPaySubs extends AppAction implements RedirectLoginInterfa
         $this->_customerSession    = $customerSession;
         $this->_checkoutSession    = $checkoutSession;
         $this->_orderFactory       = $orderFactory;
+        $this->OrderSender         = $OrderSender;
         $this->paysubsSession      = $paysubsSession;
         $this->_urlHelper          = $urlHelper;
         $this->_customerUrl        = $customerUrl;
         $this->pageFactory         = $pageFactory;
         $this->_transactionFactory = $transactionFactory;
         $this->_paymentMethod      = $paymentMethod;
+        $this->_date               = $date;
 
         parent::__construct( $context );
 

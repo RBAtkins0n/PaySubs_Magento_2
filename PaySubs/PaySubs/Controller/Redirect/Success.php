@@ -42,6 +42,16 @@ class Success extends \PaySubs\PaySubs\Controller\AbstractPaySubs
                     $this->_order->setStatus( $status ); // Configure the status
                     $this->_order->setState( $status )->save(); // Try and configure the status
                     $this->_order->save();
+                    
+                    $order = $this->_order;
+                    $model                  = $this->_paymentMethod;
+                    $order_successful_email = $model->getConfigData( 'order_email' );
+
+                    if ( $order_successful_email != '0' ) {
+                        $this->OrderSender->send( $order );
+                        $order->addStatusHistoryComment( __( 'Notified customer about order #%1.', $order->getId() ) )->setIsCustomerNotified( true )->save();
+                    }
+                    
                     $this->_redirect( 'checkout/onepage/success' );
                     break;
                 case 2:
