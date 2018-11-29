@@ -51,6 +51,25 @@ class Success extends \PaySubs\PaySubs\Controller\AbstractPaySubs
                         $this->OrderSender->send( $order );
                         $order->addStatusHistoryComment( __( 'Notified customer about order #%1.', $order->getId() ) )->setIsCustomerNotified( true )->save();
                     }
+
+                    // Capture invoice when payment is successfull
+                    $invoice = $this->_invoiceService->prepareInvoice( $order );
+                    $invoice->setRequestedCaptureCase( \Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE );
+                    $invoice->register();
+
+                    // Save the invoice to the order
+                    $transaction = $this->_objectManager->create( 'Magento\Framework\DB\Transaction' )
+                        ->addObject( $invoice )
+                        ->addObject( $invoice->getOrder() );
+
+                    $transaction->save();
+
+                    // Magento\Sales\Model\Order\Email\Sender\InvoiceSender
+                    $send_invoice_email = $model->getConfigData( 'invoice_email' );
+                    if ( $send_invoice_email != '0' ) {
+                        $this->invoiceSender->send( $invoice );
+                        $order->addStatusHistoryComment( __( 'Notified customer about invoice #%1.', $invoice->getId() ) )->setIsCustomerNotified( true )->save();
+                    }
                     
                     $this->_redirect( 'checkout/onepage/success' );
                     break;

@@ -108,6 +108,11 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Select "Yes" to Notify Users when successful order is created</comment>
                 </field>
+                <field id="invoice_email" translate="label" type="select" sortOrder="53" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Send Invoice Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Select "Yes" to Notify Users when successful invoice is created</comment>
+                </field>
                 <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
                     <frontend_class>validate-number</frontend_class>

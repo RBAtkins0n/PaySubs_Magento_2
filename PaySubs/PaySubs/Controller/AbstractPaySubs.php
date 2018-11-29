@@ -125,6 +125,8 @@ abstract class AbstractPaySubs extends AppAction implements RedirectLoginInterfa
         \Magento\Customer\Model\Url $customerUrl,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
+        \Magento\Sales\Model\Service\InvoiceService $invoiceService,
+        \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender,
         \PaySubs\PaySubs\Model\PaySubs $paymentMethod,
         \Magento\Sales\Model\Order\Email\Sender\OrderSender $OrderSender,
         \Magento\Framework\Stdlib\DateTime\DateTime $date
@@ -138,6 +140,8 @@ abstract class AbstractPaySubs extends AppAction implements RedirectLoginInterfa
         $this->_customerSession    = $customerSession;
         $this->_checkoutSession    = $checkoutSession;
         $this->_orderFactory       = $orderFactory;
+        $this->_invoiceService     = $invoiceService;
+        $this->invoiceSender       = $invoiceSender;
         $this->OrderSender         = $OrderSender;
         $this->paysubsSession      = $paysubsSession;
         $this->_urlHelper          = $urlHelper;
