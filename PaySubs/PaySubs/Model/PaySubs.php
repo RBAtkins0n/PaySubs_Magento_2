@@ -314,7 +314,7 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
         $pre = __METHOD__ . ' : ';
         // Variable initialization
         $order       = $this->_checkoutSession->getLastRealOrder();
-        $amount      = number_format( $this->getTotalAmount( $order ), 0, '', '' );
+        $amount      = number_format( $this->getTotalAmount( $order ), 2 );
         $currency    = $order->getOrderCurrencyCode();
         $order_id    = $order->getRealOrderId();
         $terminal_id = $this->getConfigData( 'terminal_id' );
