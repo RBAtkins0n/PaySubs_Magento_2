@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2018 PayGate (Pty) Ltd
+ * Copyright (c) 2019 PayGate (Pty) Ltd
  *
  * Author: App Inlet (Pty) Ltd
  * 
@@ -15,6 +15,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Framework\Data\Form\FormKey;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -142,6 +143,11 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_urlBuilder;
 
     /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $_formKey;
+
+    /**
      * @var \Magento\Checkout\Model\Session
      */
     protected $_checkoutSession;
@@ -172,6 +178,7 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \PaySubs\PaySubs\Model\ConfigFactory $configFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \PaySubs\PaySubs\Model\CartFactory $cartFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Exception\LocalizedExceptionFactory $exception
@@ -192,6 +199,7 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
         ConfigFactory $configFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Exception\LocalizedExceptionFactory $exception,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
@@ -202,6 +210,7 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
         parent::__construct( $context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $resource, $resourceCollection, $data );
         $this->_storeManager         = $storeManager;
         $this->_urlBuilder           = $urlBuilder;
+        $this->_formKey              = $formKey;
         $this->_checkoutSession      = $checkoutSession;
         $this->_exception            = $exception;
         $this->transactionRepository = $transactionRepository;
@@ -340,9 +349,9 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
         $return_url    = $this->getConfigData( 'paysubs_return_url' );
 
         if ( $return_url ) {
-            $cancelled_url = $this->getConfigData( 'paysubs_cancelled_url' );
-            $approved_url = $this->getConfigData( 'paysubs_approved_url' );
-            $declined_url = $this->getConfigData( 'paysubs_declined_url' );
+            $cancelled_url = $this->getConfigData( 'paysubs_cancelled_url' ) . '?form_key=' . $this->_formKey->getFormKey();
+            $approved_url = $this->getConfigData( 'paysubs_approved_url' ) . '?form_key=' . $this->_formKey->getFormKey();
+            $declined_url = $this->getConfigData( 'paysubs_declined_url' ) . '?form_key=' . $this->_formKey->getFormKey();
         } else {
             $cancelled_url = $this->getPaidCancelUrl();
             $approved_url = $this->getPaidSuccessUrl();
@@ -432,7 +441,7 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getPaidSuccessUrl()
     {
-        return $this->_urlBuilder->getUrl( 'paysubs/redirect/success', array( '_secure' => true ) );
+        return $this->_urlBuilder->getUrl( 'paysubs/redirect/success', array( '_secure' => true ) ) . '?form_key=' . $this->_formKey->getFormKey();
     }
 
     /**
@@ -455,7 +464,7 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
         $pre = __METHOD__ . " : ";
         paysubslog( $pre . 'bof' );
 
-        return $this->_urlBuilder->getUrl( 'paysubs/redirect' );
+        return $this->_urlBuilder->getUrl( 'paysubs/redirect' ) . '?form_key=' . $this->_formKey->getFormKey();
 
     }
 
@@ -471,7 +480,7 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
         $pre = __METHOD__ . " : ";
         paysubslog( $pre . 'bof' );
 
-        return $this->_urlBuilder->getUrl( 'paysubs/redirect' );
+        return $this->_urlBuilder->getUrl( 'paysubs/redirect' ) . '?form_key=' . $this->_formKey->getFormKey();
     }
 
     /**
@@ -499,7 +508,7 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getPaidCancelUrl()
     {
-        return $this->_urlBuilder->getUrl( 'paysubs/redirect/cancel', array( '_secure' => true ) );
+        return $this->_urlBuilder->getUrl( 'paysubs/redirect/cancel', array( '_secure' => true ) ) . '?form_key=' . $this->_formKey->getFormKey();
     }
     
     /**
@@ -507,7 +516,7 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getPaidNotifyUrl()
     {
-        return $this->_urlBuilder->getUrl( 'paysubs/notify', array( '_secure' => true ) );
+        return $this->_urlBuilder->getUrl( 'paysubs/notify', array( '_secure' => true ) ) . '?form_key=' . $this->_formKey->getFormKey();
     }
 
     /**
