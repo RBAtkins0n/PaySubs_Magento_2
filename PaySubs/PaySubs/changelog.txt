@@ -1,0 +1,6 @@
+=====================================
+Date	  : Version: Description
+=====================================
+
+2020-09-17: v1.0.5 : Fix sessions cleared in some browsers.
+                     Parity with other DPO Group Magento 2 plugins.
