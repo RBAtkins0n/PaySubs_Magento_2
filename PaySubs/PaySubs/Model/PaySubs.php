@@ -1,9 +1,9 @@
 <?php
 /*
- * Copyright (c) 2019 PayGate (Pty) Ltd
+ * Copyright (c) 2020 PayGate (Pty) Ltd
  *
  * Author: App Inlet (Pty) Ltd
- * 
+ *
  * Released under the GNU General Public License
  */
 
@@ -11,11 +11,11 @@ namespace PaySubs\PaySubs\Model;
 
 include_once dirname( __FILE__ ) . '/../Model/paysubs_common.inc';
 
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
-use Magento\Framework\Data\Form\FormKey;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -341,21 +341,21 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
             $budget = 'n';
         }
 
-        $pam           = $this->getConfigData( 'pam' );
-        $send_email    = $this->getConfigData( 'holder_email' );
-        $send_msg      = $this->getConfigData( 'sms_message' );
-        $recurring     = $this->getConfigData( 'recurring' );
-        $occur_email   = $this->getConfigData( 'occurance_email' );
-        $return_url    = $this->getConfigData( 'paysubs_return_url' );
+        $pam         = $this->getConfigData( 'pam' );
+        $send_email  = $this->getConfigData( 'holder_email' );
+        $send_msg    = $this->getConfigData( 'sms_message' );
+        $recurring   = $this->getConfigData( 'recurring' );
+        $occur_email = $this->getConfigData( 'occurance_email' );
+        $return_url  = $this->getConfigData( 'paysubs_return_url' );
 
         if ( $return_url ) {
             $cancelled_url = $this->getConfigData( 'paysubs_cancelled_url' ) . '?form_key=' . $this->_formKey->getFormKey();
-            $approved_url = $this->getConfigData( 'paysubs_approved_url' ) . '?form_key=' . $this->_formKey->getFormKey();
-            $declined_url = $this->getConfigData( 'paysubs_declined_url' ) . '?form_key=' . $this->_formKey->getFormKey();
+            $approved_url  = $this->getConfigData( 'paysubs_approved_url' ) . '?form_key=' . $this->_formKey->getFormKey();
+            $declined_url  = $this->getConfigData( 'paysubs_declined_url' ) . '?form_key=' . $this->_formKey->getFormKey();
         } else {
             $cancelled_url = $this->getPaidCancelUrl();
-            $approved_url = $this->getPaidSuccessUrl();
-            $declined_url = $this->getPaidCancelUrl();
+            $approved_url  = $this->getPaidSuccessUrl();
+            $declined_url  = $this->getPaidCancelUrl();
         }
         if ( $recurring ) {
             $occur_freq   = $this->getConfigData( 'occur_frequency' );
@@ -382,33 +382,36 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
         }
         $customerAddressId = $order->getBillingAddress();
         $phone             = $customerAddressId->getTelephone();
-        $hash              = $terminal_id . $order_id . $description . $amount . $currency . $occur_freq . $occur_count . $phone . $message . $cancelled_url . $occur_email . $settlement . $occur_amount . $occur_date . $budget . $email . md5( $this->getConfigData( 'pam' ) . '::' . $order_id ); //Hash value calculation
-        $params            = array(
-            'p1'                => $terminal_id,
-            'p2'                => $order->getRealOrderId() . ' ' . date( "h:i:s" ),
-            'p3'                => $description,
-            'p4'                => $amount,
-            'p5'                => $currency,
-            'p6'                => $occur_freq,
-            'p7'                => $occur_count,
-            'p8'                => $phone,
-            'p9'                => $message,
-            'p10'               => $cancelled_url,
-            'p11'               => $occur_email,
-            'p12'               => $settlement,
-            'p13'               => $occur_amount,
-            'm_3'               => $order->getRealOrderId(),
-            'NextOccuranceDate' => $occur_date,
-            'Budget'            => $budget,
-            'CardholderEmail'   => $email,
-            'UrlsProvided'      => 'Y',
-            'ApprovedUrl'       => $approved_url,
-            'DeclinedUrl'       => $declined_url,
-            'Hash'              => $hash,
-
+        $hashParams        = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10', 'p11', 'p12', 'p13', 'NextOccurDate', 'Budget', 'CardholderEmail', 'm_1',
+            'm_2', 'm_3', 'm_4', 'm_5', 'm_6', 'm_7', 'm_8', 'm_9', 'm_10', 'CustomerID', 'RecurReference', 'MerchantToken'];
+        $params = array(
+            'p1'              => $terminal_id,
+            'p2'              => $order->getRealOrderId() . ' ' . date( "h:i:s" ),
+            'p3'              => $description,
+            'p4'              => $amount,
+            'p5'              => $currency,
+            'p6'              => $occur_freq,
+            'p7'              => $occur_count,
+            'p8'              => $phone,
+            'p9'              => $message,
+            'p10'             => $cancelled_url,
+            'p11'             => $occur_email,
+            'p12'             => $settlement,
+            'p13'             => $occur_amount,
+            'm_3'             => $order->getRealOrderId(),
+            'NextOccurDate'   => $occur_date,
+            'Budget'          => $budget,
+            'CardholderEmail' => $email,
+            'UrlsProvided'    => 'Y',
+            'ApprovedUrl'     => $approved_url,
+            'DeclinedUrl'     => $declined_url,
         );
-        if ( $this->getConfigData( 'pam' ) != '' ) {
-            $params['m_1'] = md5( $this->getConfigData( 'pam' ) . '::' . $params['p2'] );
+        if ( $pam != '' ) {
+            $hashString = '';
+            foreach ( $hashParams as $hashParam ) {
+                $hashString .= isset( $params[$hashParam] ) ? $params[$hashParam] : '';
+            }
+            $params['Hash'] = md5( $hashString . $pam );
         }
         paysubslog( $pre . 'params are :' . print_r( $params, true ) );
         return ( $params );
@@ -510,7 +513,7 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
     {
         return $this->_urlBuilder->getUrl( 'paysubs/redirect/cancel', array( '_secure' => true ) ) . '?form_key=' . $this->_formKey->getFormKey();
     }
-    
+
     /**
      * getPaidNotifyUrl
      */
@@ -526,7 +529,8 @@ class PaySubs extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getPaySubsUrl()
     {
-        return ( 'https://www.vcs.co.za/vvonline/ccform.asp' );
+        // return ( 'https://core3.directpay.online/vcs/pay' );
+        return ( 'https://www.vcs.co.za/vvonline/vcspay.aspx' );
     }
 
     /**

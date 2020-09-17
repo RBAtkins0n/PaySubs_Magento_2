@@ -1,10 +1,10 @@
 # PaySubs_Magento_2
-## DPO PayGate PaySubs1 (VCS) Magento plugin v1.0.4 for Magento v2.3.1
+## PayGate PaySubs1 (VCS) Magento plugin v1.0.5 for Magento v2.3.5
 
-This is the DPO PayGate PaySubs (VCS) plugin for Magento 2. Please feel free to contact the DPO PayGate support team at support@paygate.co.za should you require any assistance.
+This is the PayGate PaySubs (VCS) plugin for Magento 2. Please feel free to contact the PayGate support team at support@paygate.co.za should you require any assistance.
 
 ## Installation
-Please navigate to the [releases page](https://github.com/PayGate/PaySubs_Magento_2/releases), download the latest release (v1.0.4) and unzip. You will them be able to follow the integration guide which is included in the zip.
+Please navigate to the [releases page](https://github.com/PayGate/PaySubs_Magento_2/releases), download the latest release (v1.0.5) and unzip. You will them be able to follow the integration guide which is included in the zip.
 
 ## Collaboration
 
